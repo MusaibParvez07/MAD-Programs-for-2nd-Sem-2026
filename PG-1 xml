@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="20dp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"/>
 
     <TextView
         android:id="@+id/title"
