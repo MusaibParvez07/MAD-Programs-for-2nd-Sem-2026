@@ -1,0 +1,58 @@
+// Java Logic Code to be included inside the MainActivity.java
+
+package com.example.mytest;
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    ProgressBar progressBar;
+    TextView txtPercent;
+    int progress = 0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        progressBar = findViewById(R.id.progressBar);
+        txtPercent = findViewById(R.id.txtPercent);
+
+        Handler handler = new Handler();
+
+        new Thread(() -> {
+            while (progress <= 100) {
+
+                handler.post(() -> {
+                    progressBar.setProgress(progress);
+                    txtPercent.setText("Progress: " + progress + "%");
+                });
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                progress += 10;
+            }
+
+            // Show Alert when complete
+            handler.post(() -> showAlert());
+
+        }).start();
+    }
+
+    private void showAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Message");
+        builder.setMessage("Download Complete");
+        builder.setPositiveButton("OK", null);
+        builder.show();
+    }
+}
