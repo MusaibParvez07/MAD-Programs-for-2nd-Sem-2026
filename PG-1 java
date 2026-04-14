@@ -1,11 +1,12 @@
 // Java Logic Code to be included inside the MainActivity.java
 
-package com.example.mytest;
+package com.example.program1;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Button;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
     TextView txtPercent;
+    Button btnDownload;
+
     int progress = 0;
 
     @Override
@@ -22,30 +25,35 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         txtPercent = findViewById(R.id.txtPercent);
+        btnDownload = findViewById(R.id.btnDownload);
 
         Handler handler = new Handler();
 
-        new Thread(() -> {
-            while (progress <= 100) {
+        btnDownload.setOnClickListener(v -> {
 
-                handler.post(() -> {
-                    progressBar.setProgress(progress);
-                    txtPercent.setText("Progress: " + progress + "%");
-                });
+            progress = 0;
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            new Thread(() -> {
+                while (progress <= 100) {
+
+                    handler.post(() -> {
+                        progressBar.setProgress(progress);
+                        txtPercent.setText("Progress: " + progress + "%");
+                    });
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    progress += 10;
                 }
 
-                progress += 10;
-            }
+                handler.post(() -> showAlert());
 
-            // Show Alert when complete
-            handler.post(() -> showAlert());
-
-        }).start();
+            }).start();
+        });
     }
 
     private void showAlert() {
